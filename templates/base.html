@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{{ app_name }}{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="app-shell">
+        <aside class="sidebar">
+            <a class="brand" href="{{ url_for('dashboard') }}">
+                <span class="brand-mark">SE</span>
+                <span>
+                    <strong>Software Effort</strong>
+                    <small>Estimation</small>
+                </span>
+            </a>
+            <nav class="side-nav">
+                <a class="{% if request.endpoint == 'dashboard' %}active{% endif %}" href="{{ url_for('dashboard') }}">Dasbor</a>
+                <a class="{% if request.endpoint == 'estimate' %}active{% endif %}" href="{{ url_for('estimate') }}">Estimasi</a>
+                <a class="{% if request.endpoint == 'history' %}active{% endif %}" href="{{ url_for('history') }}">Riwayat Prediksi</a>
+                <a class="{% if request.endpoint == 'model_info' %}active{% endif %}" href="{{ url_for('model_info') }}">Informasi Model</a>
+            </nav>
+            <div class="side-note">
+                <span>Metode</span>
+                <strong>Elastic Net Regression</strong>
+                <span>Satuan hasil: {{ effort_unit }}</span>
+            </div>
+        </aside>
+
+        <div class="workspace">
+            <header class="topbar">
+                <button class="menu-toggle" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileNav" aria-label="Buka menu">
+                    Menu
+                </button>
+                <div>
+                    <p class="eyebrow">Sistem estimasi effort</p>
+                    <h1>{% block page_title %}{{ app_name }}{% endblock %}</h1>
+                </div>
+            </header>
+
+            <main class="content">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        <div class="flash-stack">
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endwith %}
+                {% block content %}{% endblock %}
+            </main>
+        </div>
+    </div>
+
+    <div class="offcanvas offcanvas-start mobile-nav" tabindex="-1" id="mobileNav">
+        <div class="offcanvas-header">
+            <h2 class="offcanvas-title">{{ app_name }}</h2>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Tutup"></button>
+        </div>
+        <div class="offcanvas-body">
+            <nav class="side-nav">
+                <a href="{{ url_for('dashboard') }}">Dasbor</a>
+                <a href="{{ url_for('estimate') }}">Estimasi</a>
+                <a href="{{ url_for('history') }}">Riwayat Prediksi</a>
+                <a href="{{ url_for('model_info') }}">Informasi Model</a>
+            </nav>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='vendor/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

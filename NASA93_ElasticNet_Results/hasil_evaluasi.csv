@@ -1,0 +1,8 @@
+Metrik,Nilai
+Alpha Terbaik,1
+L1 Ratio Terbaik,0.7
+Best CV MAE Score,433.4346
+MAE (Test),185.1677
+RMSE (Test),270.2966
+R² Score (Test),0.4193
+MAPE (Test),117.7073%

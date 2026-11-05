@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block title %}Informasi Model · {{ app_name }}{% endblock %}
+{% block page_title %}Informasi Model{% endblock %}
+{% block content %}
+<section class="panel">
+    <div class="panel-head">
+        <h3>Software Effort Estimation</h3>
+    </div>
+    <div class="panel-body prose">
+        <p>
+            Software effort estimation adalah perkiraan usaha yang dibutuhkan untuk mengembangkan perangkat lunak.
+            Pada aplikasi ini, usaha dinyatakan dalam <strong>person-months</strong>. Pengguna memasukkan karakteristik proyek,
+            kemudian model yang sudah dilatih menghasilkan estimasi. Hasil tersebut bukan nilai effort aktual.
+        </p>
+        <p>
+            Pada dokumentasi dataset NASA93, satu person-month setara dengan 152 jam dan mencakup jam pengembangan serta jam manajemen.
+        </p>
+    </div>
+</section>
+
+<section class="panel">
+    <div class="panel-head">
+        <h3>Regresi Elastic Net</h3>
+    </div>
+    <div class="panel-body prose">
+        <p>
+            Elastic Net adalah regresi linear yang menambahkan dua jenis regularisasi sekaligus: L1 dan L2.
+            Kombinasi ini dipakai agar model tetap dapat menyusutkan koefisien, termasuk pada fitur yang saling berkorelasi.
+        </p>
+        <div class="info-split">
+            <article>
+                <h4>Regularisasi L1</h4>
+                <p>Penalti L1, seperti pada Lasso, mendorong sebagian koefisien menuju nol. Koefisien yang menjadi nol berarti fitur tersebut tidak dipakai dalam persamaan prediksi.</p>
+            </article>
+            <article>
+                <h4>Regularisasi L2</h4>
+                <p>Penalti L2, seperti pada Ridge, mengecilkan koefisien tanpa harus membuatnya tepat nol. Ini membantu menstabilkan model ketika fitur saling berhubungan.</p>
+            </article>
+        </div>
+        <h4>Parameter alpha</h4>
+        <p>
+            Alpha mengatur kekuatan regularisasi secara keseluruhan. Nilai yang lebih besar memberi penalti yang lebih kuat terhadap koefisien.
+            Model yang dimuat memakai alpha <strong>{{ alpha }}</strong>.
+        </p>
+        <h4>Parameter l1_ratio</h4>
+        <p>
+            L1 ratio mengatur campuran kedua penalti. Nilai 0 berarti seluruh penalti berupa L2, sedangkan nilai 1 berarti seluruh penalti berupa L1.
+            Model yang dimuat memakai l1_ratio <strong>{{ l1_ratio }}</strong>, jadi sebagian besar penalti berasal dari L1 dan sisanya dari L2.
+        </p>
+        <h4>Hyperparameter tuning</h4>
+        <p>
+            Hyperparameter tuning adalah pemilihan kombinasi alpha dan l1_ratio sebelum model akhir dipakai.
+            {% if training.tuning_method %}
+            Artefak penelitian mencatat metode <strong>{{ training.tuning_method }}</strong>.
+            {% endif %}
+            {% if training.cv_metric_name and training.cv_score %}
+            Kombinasi terbaik pada berkas hasil grid search memiliki {{ training.cv_metric_name }} sebesar {{ training.cv_score }}.
+            {% endif %}
+            Aplikasi web hanya memuat kombinasi yang sudah dipilih. Pencarian parameter tidak dijalankan ulang saat pengguna meminta estimasi.
+        </p>
+    </div>
+</section>
+
+<section class="panel">
+    <div class="panel-head">
+        <h3>Cara model dipakai di aplikasi</h3>
+    </div>
+    <div class="panel-body prose">
+        <p>
+            File yang dimuat adalah pipeline scikit-learn {{ sklearn_version }}. Pipeline tersebut sudah berisi
+            StandardScaler untuk fitur numerik, OrdinalEncoder dan StandardScaler untuk cost driver,
+            serta OneHotEncoder untuk fitur nominal. Karena preprocessing ada di dalam pipeline,
+            aplikasi tidak melakukan fitting ulang scaler atau encoder pada input pengguna.
+        </p>
+        <p>
+            Target training adalah <strong>act_effort</strong>. Target itu tidak diminta sebagai input.
+            Artefak prediksi menunjukkan keluaran dalam skala effort asli, termasuk kemungkinan nilai negatif,
+            sehingga aplikasi tidak menerapkan inverse dari transformasi log.
+        </p>
+        <p>Jumlah fitur input yang dikirim ke model: <strong>{{ feature_count }}</strong>.</p>
+        {% if training.test_metrics %}
+        <h4>Hasil evaluasi artefak training</h4>
+        <p>
+            Metrik di bawah ini berasal dari berkas evaluasi model pada data uji. Metrik regresi ini tidak disebut sebagai akurasi,
+            dan tidak dijadikan klaim bahwa setiap estimasi baru akan memiliki selisih yang sama.
+        </p>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr><th>Metrik</th><th>Nilai</th></tr>
+                </thead>
+                <tbody>
+                    {% for metric in training.test_metrics %}
+                    <tr><td>{{ metric.name }}</td><td>{{ metric.value }}</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

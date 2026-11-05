@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Hasil Estimasi · {{ app_name }}{% endblock %}
+{% block page_title %}Hasil Estimasi{% endblock %}
+{% block content %}
+<section class="result-layout">
+    <article class="result-hero">
+        <p class="eyebrow">Estimasi model</p>
+        <p class="result-caption">Effort pengembangan perangkat lunak</p>
+        <p class="result-value">{{ format_effort(prediction.effort) }}</p>
+        <p class="result-unit">{{ prediction.unit }}</p>
+        <p class="result-note">Nilai ini merupakan estimasi dari model Elastic Net Regression, bukan effort aktual proyek.</p>
+        {% if negative %}
+        <div class="alert alert-warning mb-0">
+            Model menghasilkan estimasi negatif. Regresi linear dapat menghasilkan nilai di luar rentang yang masuk akal secara fisik. Angka tersebut tetap ditampilkan sebagai keluaran model, tanpa dipotong atau diganti.
+        </div>
+        {% endif %}
+        <dl class="result-meta">
+            <div>
+                <dt>Metode</dt>
+                <dd>Elastic Net Regression</dd>
+            </div>
+            <div>
+                <dt>Nomor prediksi</dt>
+                <dd>#{{ prediction.id }}</dd>
+            </div>
+            <div>
+                <dt>Waktu</dt>
+                <dd>{{ prediction.created_at }}</dd>
+            </div>
+        </dl>
+        <div class="form-actions no-print">
+            <a class="btn btn-primary" href="{{ url_for('estimate') }}">Kembali ke Estimasi</a>
+            <button class="btn btn-outline-secondary" type="button" onclick="window.print()">Cetak Hasil</button>
+        </div>
+    </article>
+
+    <article class="panel">
+        <div class="panel-head">
+            <h3>Ringkasan karakteristik proyek</h3>
+            <p>Nilai yang dikirim ke pipeline model.</p>
+        </div>
+        <div class="panel-body">
+            {% set current = namespace(group="") %}
+            {% for row in prediction.rows %}
+                {% if row.group != current.group %}
+                    {% set current.group = row.group %}
+                    <h4>{{ row.group }}</h4>
+                {% endif %}
+                <div class="summary-row">
+                    <span>{{ row.label }}</span>
+                    <strong>{{ row.display }}</strong>
+                </div>
+            {% endfor %}
+        </div>
+    </article>
+</section>
+{% endblock %}

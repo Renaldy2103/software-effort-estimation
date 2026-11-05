@@ -1,0 +1,3 @@
+Best Alpha: 1
+Best L1 Ratio: 0.7
+Best CV Score (RMSE): 433.4346

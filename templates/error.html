@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}{{ title }} · {{ app_name }}{% endblock %}
+{% block page_title %}{{ title }}{% endblock %}
+{% block content %}
+<section class="panel">
+    <div class="panel-body empty-state">
+        <h3>{{ title }}</h3>
+        <p>{{ message }}</p>
+        <a class="btn btn-primary" href="{{ url_for('dashboard') }}">Kembali ke Dasbor</a>
+    </div>
+</section>
+{% endblock %}

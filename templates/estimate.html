@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Estimasi · {{ app_name }}{% endblock %}
+{% block page_title %}Estimasi Effort{% endblock %}
+{% block content %}
+<form method="post" action="{{ url_for('estimate') }}" novalidate>
+    {% for group in groups %}
+    <section class="panel">
+        <div class="panel-head">
+            <h3>{{ group.title }}</h3>
+            <p>{{ group.description }}</p>
+        </div>
+        <div class="panel-body">
+            <div class="row g-3">
+                {% for field in group.fields %}
+                <div class="col-12 col-md-6">
+                    <label class="form-label" for="{{ field.key }}">
+                        {{ field.label }}
+                        {% if field.unit %}<span class="unit">{{ field.unit }}</span>{% endif %}
+                    </label>
+                    {% if field.type == "category" %}
+                    <select class="form-select" id="{{ field.key }}" name="{{ field.key }}" required>
+                        <option value="" {% if not field.value %}selected{% endif %} disabled>Pilih {{ field.label|lower }}</option>
+                        {% for option in field.options %}
+                        <option value="{{ option.value }}" {% if field.value == option.value %}selected{% endif %}>{{ option.label }}</option>
+                        {% endfor %}
+                    </select>
+                    {% else %}
+                    <input
+                        class="form-control"
+                        type="number"
+                        id="{{ field.key }}"
+                        name="{{ field.key }}"
+                        value="{{ field.value }}"
+                        step="any"
+                        {% if field.key == "equivphyskloc" %}min="0.0001"{% endif %}
+                        required
+                        inputmode="decimal"
+                    >
+                    {% endif %}
+                    {% if field.help %}<div class="form-text">{{ field.help }}</div>{% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    {% endfor %}
+
+    <div class="form-actions">
+        <button class="btn btn-primary btn-lg" type="submit">Hitung Estimasi</button>
+        <button class="btn btn-outline-secondary btn-lg" type="reset">Reset Form</button>
+    </div>
+</form>
+{% endblock %}

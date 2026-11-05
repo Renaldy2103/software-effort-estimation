@@ -1,0 +1,207 @@
+{
+    "cat2": {
+        "type": "category",
+        "options": [
+            "Avionics",
+            "application_ground",
+            "avionicsmonitoring",
+            "batchdataprocessing",
+            "communications",
+            "datacapture",
+            "launchprocessing",
+            "missionplanning",
+            "monitor_control",
+            "operatingsystem",
+            "realdataprocessing",
+            "science",
+            "simulation",
+            "utility"
+        ],
+        "default": "Avionics"
+    },
+    "forg": {
+        "type": "category",
+        "options": [
+            "f",
+            "g"
+        ],
+        "default": "f"
+    },
+    "center": {
+        "type": "category",
+        "options": [
+            "1",
+            "2",
+            "3",
+            "5",
+            "6"
+        ],
+        "default": "1"
+    },
+    "year": {
+        "type": "number",
+        "default": 1980.0
+    },
+    "mode": {
+        "type": "category",
+        "options": [
+            "embedded",
+            "organic",
+            "semidetached"
+        ],
+        "default": "embedded"
+    },
+    "rely": {
+        "type": "category",
+        "options": [
+            "h",
+            "l",
+            "n",
+            "vh"
+        ],
+        "default": "h"
+    },
+    "data": {
+        "type": "category",
+        "options": [
+            "h",
+            "l",
+            "n",
+            "vh"
+        ],
+        "default": "h"
+    },
+    "cplx": {
+        "type": "category",
+        "options": [
+            "h",
+            "l",
+            "n",
+            "vh",
+            "xh"
+        ],
+        "default": "h"
+    },
+    "time": {
+        "type": "category",
+        "options": [
+            "h",
+            "n",
+            "vh",
+            "xh"
+        ],
+        "default": "h"
+    },
+    "stor": {
+        "type": "category",
+        "options": [
+            "h",
+            "n",
+            "vh",
+            "xh"
+        ],
+        "default": "h"
+    },
+    "virt": {
+        "type": "category",
+        "options": [
+            "h",
+            "l",
+            "n"
+        ],
+        "default": "h"
+    },
+    "turn": {
+        "type": "category",
+        "options": [
+            "h",
+            "l",
+            "n",
+            "vh"
+        ],
+        "default": "h"
+    },
+    "acap": {
+        "type": "category",
+        "options": [
+            "h",
+            "n",
+            "vh"
+        ],
+        "default": "h"
+    },
+    "aexp": {
+        "type": "category",
+        "options": [
+            "h",
+            "l",
+            "n",
+            "vh"
+        ],
+        "default": "h"
+    },
+    "pcap": {
+        "type": "category",
+        "options": [
+            "h",
+            "n",
+            "vh"
+        ],
+        "default": "h"
+    },
+    "vexp": {
+        "type": "category",
+        "options": [
+            "h",
+            "l",
+            "n",
+            "vl"
+        ],
+        "default": "h"
+    },
+    "lexp": {
+        "type": "category",
+        "options": [
+            "h",
+            "l",
+            "n",
+            "vl"
+        ],
+        "default": "h"
+    },
+    "modp": {
+        "type": "category",
+        "options": [
+            "h",
+            "l",
+            "n",
+            "vh",
+            "vl"
+        ],
+        "default": "h"
+    },
+    "tool": {
+        "type": "category",
+        "options": [
+            "h",
+            "l",
+            "n",
+            "vh",
+            "vl"
+        ],
+        "default": "h"
+    },
+    "sced": {
+        "type": "category",
+        "options": [
+            "h",
+            "l",
+            "n"
+        ],
+        "default": "h"
+    },
+    "equivphyskloc": {
+        "type": "number",
+        "default": 50.0
+    }
+}

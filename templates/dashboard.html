@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block title %}Dasbor · {{ app_name }}{% endblock %}
+{% block page_title %}Dasbor{% endblock %}
+{% block content %}
+<section class="hero-card">
+    <div>
+        <p class="eyebrow">Aplikasi penelitian skripsi</p>
+        <h2>{{ app_name }}</h2>
+        <p class="lead">{{ app_subtitle }}</p>
+        <p>
+            Aplikasi ini memperkirakan effort pengembangan perangkat lunak dari karakteristik proyek yang Anda masukkan.
+            Perhitungan memakai model <strong>Elastic Net Regression</strong> yang sudah dilatih. Model tidak dilatih ulang pada saat prediksi.
+        </p>
+        <a class="btn btn-primary btn-lg" href="{{ url_for('estimate') }}">Mulai Estimasi</a>
+    </div>
+    <div class="hero-stat">
+        <span>Satuan prediksi</span>
+        <strong>{{ effort_unit }}</strong>
+        <small>Estimasi model, bukan effort aktual.</small>
+    </div>
+</section>
+
+<section class="stat-grid">
+    <article class="info-card">
+        <span>Metode</span>
+        <strong>Elastic Net Regression</strong>
+        <p>Regresi linear dengan regularisasi L1 dan L2.</p>
+    </article>
+    <article class="info-card">
+        <span>Best Alpha</span>
+        <strong>{{ alpha }}</strong>
+        <p>Kekuatan regularisasi pada model yang dimuat.</p>
+    </article>
+    <article class="info-card">
+        <span>Best L1 Ratio</span>
+        <strong>{{ l1_ratio }}</strong>
+        <p>Proporsi penalti L1 terhadap campuran L1 dan L2.</p>
+    </article>
+    <article class="info-card">
+        <span>Fitur input</span>
+        <strong>{{ feature_count }}</strong>
+        <p>Sesuai fitur yang digunakan pipeline saat training. Target act_effort tidak diminta.</p>
+    </article>
+</section>
+
+<section class="panel">
+    <div class="panel-head">
+        <h3>Model yang digunakan</h3>
+    </div>
+    <div class="panel-body">
+        <dl class="meta-list">
+            <div>
+                <dt>Artefak</dt>
+                <dd>Pipeline lengkap: preprocessing dan Elastic Net</dd>
+            </div>
+            <div>
+                <dt>Preprocessing di dalam pipeline</dt>
+                <dd>StandardScaler, OrdinalEncoder, dan OneHotEncoder</dd>
+            </div>
+            <div>
+                <dt>Transformasi target</dt>
+                <dd>Tidak ada. Keluaran model langsung dibaca sebagai person-months.</dd>
+            </div>
+            <div>
+                <dt>Versi scikit-learn saat training</dt>
+                <dd>{{ sklearn_version }}</dd>
+            </div>
+            {% if training.tuning_method %}
+            <div>
+                <dt>Metode tuning</dt>
+                <dd>{{ training.tuning_method }}</dd>
+            </div>
+            {% endif %}
+            {% if training.cv_metric_name and training.cv_score %}
+            <div>
+                <dt>Skor validasi silang terbaik</dt>
+                <dd>{{ training.cv_metric_name }}: {{ training.cv_score }}</dd>
+            </div>
+            {% endif %}
+        </dl>
+        {% if training.test_metrics %}
+        <h4>Hasil evaluasi pada data uji</h4>
+        <p class="muted">Angka berikut diambil dari artefak training dan menjelaskan evaluasi model yang sudah dilatih. Angka ini bukan jaminan untuk proyek baru.</p>
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>Metrik</th>
+                        <th>Nilai</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for metric in training.test_metrics %}
+                    <tr>
+                        <td>{{ metric.name }}</td>
+                        <td>{{ metric.value }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

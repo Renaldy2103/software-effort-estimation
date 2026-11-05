@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Riwayat Prediksi · {{ app_name }}{% endblock %}
+{% block page_title %}Riwayat Prediksi{% endblock %}
+{% block content %}
+<section class="panel">
+    <div class="panel-head panel-head-split">
+        <div>
+            <h3>Dokumentasi penggunaan</h3>
+            <p>Riwayat hanya disimpan sebagai catatan. Data ini tidak dipakai untuk melatih ulang model.</p>
+        </div>
+        {% if predictions %}
+        <form method="post" action="{{ url_for('delete_all_history') }}" data-confirm="Hapus seluruh riwayat prediksi?">
+            <button class="btn btn-outline-danger" type="submit">Hapus Semua</button>
+        </form>
+        {% endif %}
+    </div>
+    <div class="panel-body">
+        {% if predictions %}
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>Tanggal dan waktu</th>
+                        <th>Ringkasan input</th>
+                        <th>Estimasi effort</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in predictions %}
+                    <tr>
+                        <td>{{ item.id }}</td>
+                        <td>{{ item.created_at }}</td>
+                        <td>{{ item.summary }}</td>
+                        <td>{{ format_effort(item.effort) }} {{ item.unit }}</td>
+                        <td class="history-actions">
+                            <a class="btn btn-sm btn-primary" href="{{ url_for('result', prediction_id=item.id) }}">Detail</a>
+                            <form method="post" action="{{ url_for('delete_history', prediction_id=item.id) }}" data-confirm="Hapus riwayat prediksi nomor {{ item.id }}?">
+                                <button class="btn btn-sm btn-outline-danger" type="submit">Hapus</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <h4>Belum ada prediksi</h4>
+            <p>Hasil estimasi yang berhasil dihitung akan muncul di halaman ini.</p>
+            <a class="btn btn-primary" href="{{ url_for('estimate') }}">Buat Estimasi</a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
